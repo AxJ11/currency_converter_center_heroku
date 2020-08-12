@@ -1,0 +1,329 @@
+* {
+  font-family             : "微軟正黑體";
+  transition              : 0.5s ease;
+}
+body {
+  background-image        : url('../img/global.jpg');
+  background-position     : center -3rem;
+  background-attachment   : fixed;
+}
+.container1 {
+  width                   : 100%;
+  padding                 : 3rem 2rem;
+  background              : #00000010;
+  color                   : #fff;
+  background              : #00000098;
+  background-clip         : padding-box ;
+  margin                  : auto;
+}
+h1 {
+  height                  : 70vh;
+  line-height             : 65vh;
+  text-align              : center;
+  margin-bottom           : 0;
+  text-shadow             : 5px 5px 5px #000;
+}
+h1 img {
+  width                   : 5.3rem;
+  height                  : 5.3rem;
+}
+h1 img:hover {
+  cursor: pointer;
+}
+h1 a {
+  text-decoration: none;
+}
+#myTab {
+  background: #5757577e;
+}
+#navs>p {
+  font-size: 1.1rem;
+  text-align: right;
+  margin: 1rem 1rem;
+}
+#dataTime, #dataTime2 {
+  color: #f00;
+  background: #0000007e;
+  padding: 0.5rem;
+  border-radius: 5%;
+}
+#tab2>p {
+  font-size: 1.1rem;
+  text-align: right;
+  margin: 1rem 1rem;
+}
+/* 表格區1-------------------------------------------------------------------------------- */
+#tab1 {
+  width: 100% !important;
+}
+#dt {
+  border-spacing          : 0 !important;
+  border-collapse         : collapse !important;
+  margin                  : 2rem 0 !important;
+}
+#dt th {
+  background              : #0062cad0;
+}
+#dt td, #dt th {
+  padding                 : 0.2rem 0.2rem;
+  border                  : 1px solid #ffffff;
+}
+#dt td:not(:nth-child(4)), th {
+  text-align              : center;
+}
+#dt td:nth-child(4) {
+  text-align              : right;
+  padding-right           : 7rem;
+}
+#dt td:nth-child(5) {
+  padding                 : 0 1.5rem;
+}
+#dt tbody>tr:nth-child(odd) {
+  background: #0192aca8;
+  /* background              : #e2ab07e7; */
+}
+#dt tbody>tr:nth-child(even) {
+  background: #3b3b3b8f;
+  /* background              : #e322f5c4; */
+}
+#dt tbody>tr:hover {
+  background              : #007bff;
+}
+#dt td:not(:nth-child(1)):not(:nth-child(5)):hover {
+  font-size               : 1.3rem;
+  text-shadow             : 5px 5px 5px #000;
+  font-weight             : 900;
+}
+/* 表格區2-------------------------------------------------------------------------------- */
+#tb2 {
+  text-align: center;
+  background: #000000b7;
+}
+#dt2 th {
+  background              : #00ca65d0;
+}
+#dt2 td, #dt2 th {
+  padding                 : 0.2rem 0.2rem;
+  border                  : 1px solid #92929283;
+}
+#dt2 tbody>tr:nth-child(odd) {
+  background: #0187d49a;
+}
+#dt2 tbody>tr:nth-child(even) {
+  background: #3b3b3bab;
+}
+#dt2 tbody>tr:hover {
+  background              : #007bff;
+}
+#dt2 td:not(:nth-child(1)):not(:nth-child(2)):hover {
+  font-size               : 1.3rem;
+  text-shadow             : 5px 5px 5px #000;
+  font-weight             : 900;
+}
+/* 表格區3-------------------------------------------------------------------------------- */
+#dt3 {
+  background: #ff06ea52;
+  text-align: center;
+}
+#dt3 td, #dt3 th {
+  padding                 : 0.2rem 0.2rem;
+  border                  : 1px solid #92929283;
+}
+#dt3 tr:nth-child(2) td:nth-child(1) {
+  text-align: right;
+  font-size: 1.3rem;
+}
+input[value="計算"] {
+  padding: 0.2rem 1.5rem;
+}
+#result {
+  background: #00ff2286;
+  border-radius: 5%;
+  margin: 0 0.2rem;
+  padding: 0.1rem 0.3rem;
+}
+#dt3 select {
+  overflow-y: auto;background-image: none;
+}
+/* 上下頁鈕區-------------------------------------------------------------------------------- */
+#goTop {
+  width                   : 1.9rem;
+  height                  : 1.7rem;
+  position                : fixed;
+  right                   : 2.55rem;
+  bottom                  : 10rem;
+  cursor                  : pointer;
+  filter                  : opacity(50%);
+}
+#goTop:hover {
+  filter                  : opacity(100%);
+}
+#goBottom {
+  width                   : 1.9rem;
+  height                  : 1.7rem;
+  position                : fixed;
+  right                   : 2.55rem;
+  bottom                  : 2.5rem;
+  cursor                  : pointer;
+  transform               : rotate(180deg);
+  filter                  : opacity(50%);
+}
+#goBottom:hover {
+  filter                  : opacity(100%);
+}
+#pageUp, #pageDown {
+  width                   : 2rem;
+  height                  : 1.8rem;
+  position                : fixed;
+  right                   : 2.5rem;
+  cursor                  : pointer;
+  color                   : #007bff78;
+  filter                  : opacity(50%);
+}
+#pageUp {
+  bottom                  : 7.6rem;
+}
+#pageDown {
+  bottom                  : 4.9rem;
+  transform               : rotate(180deg);
+}
+#pageUp:hover, #pageDown:hover {
+  cursor                  : pointer;
+  filter                  : opacity(100%);
+}
+/* 後台login-------------------------------------------------------------------------------- */
+.login {
+  width: 30vw;
+  height: 7rem;
+  margin: 40vh auto;
+  padding: 3rem 0;
+  padding-left: 5.5rem;
+  color: #fff;
+  background: #000000ab;
+  border-radius: 5%;
+}
+.login a {
+  text-decoration: none;
+  background: #f0f0f0cc;
+  border: 1px solid #757575c2;
+  border-radius: 6%;
+  padding: 0.5rem;
+  margin-left: 5.5rem;
+}
+
+.login a:hover {
+  background: #ffffff;
+}
+
+/* 頁尾區----------------------------------------------------------------------------------- */
+footer {
+  font-size               : 1.2rem;
+  height                  : 4rem;
+  background              : #212529d0;
+  line-height             : 4rem;
+  text-align              : left;
+  padding                 : 0 2rem;
+  display                 : flex;
+  justify-content         : space-between;
+}
+footer a {
+  color                   : #ffd902;
+}
+footer a:hover {
+  color                   : #fff;
+  text-decoration         : none;
+}
+/* 網頁刷新時間區------------------------------------------------------------------------------ */
+.freshTime {color         : #fff;}
+.freshTime.span {color    : #fff;}
+/* RWD---------------------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size             : 2.3rem;
+  }
+  h1 img {
+    width                 : 3.3rem;
+    height                : 3.3rem;
+  }
+  #goTop             {right: 10px;}
+  #goBottom          {right: 10px;}
+  #pageUp            {right: 10px;}
+  #pageDown          {right: 10px;}
+}
+@media screen and (max-width: 1000px) {
+  #dt td:nth-child(4) {
+    padding-right         : 0.3rem;
+  }
+  #dt td:nth-child(5), #dt th:nth-child(5), #dt2 td:nth-child(1), #dt2 th:nth-child(1), #dt2 td:nth-child(5), #dt2 th:nth-child(5), #tab2>p {
+    display: none;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #dt td:nth-child(5) {
+    padding               : 0.2rem 0.1rem;
+  }
+}
+@media screen and (min-width: 769px) {
+  h1 {
+    font-size             : 4rem;
+  }
+  #goTop             {right: 12px;}
+  #goBottom          {right: 12px;}
+  #pageUp            {right: 12px;}
+  #pageDown          {right: 12px;}
+}
+@media screen and (min-width: 1000px) {
+  h1 {
+    font-size             : 5.3rem;
+  }
+  #goTop             {right: 15px;}
+  #goBottom          {right: 15px;}
+  #pageUp            {right: 15px;}
+  #pageDown          {right: 15px;}
+  #navs>p          {display: none;}
+  .tab-content  {margin-top: 1.5rem;}
+}
+@media screen and (min-width: 1200px) {
+  #tb, #tb2, th {
+    font-size: 1.1rem;
+  }
+  #goTop             {right: 24px;}
+  #goBottom          {right: 24px;}
+  #pageUp            {right: 24px;}
+  #pageDown          {right: 24px;}
+}
+@media screen and (min-width: 1400px) {
+  #goTop             {right: 135px;}
+  #goBottom          {right: 135px;}
+  #pageUp            {right: 135px;}
+  #pageDown          {right: 135px;}
+}
+@media screen and (min-width: 1600px) {
+  h1 {
+    letter-spacing        : 2rem;
+  }
+  #navs {
+    width                 : 80%;
+    margin                : auto;
+  }
+  #goTop             {right: 210px;}
+  #goBottom          {right: 210px;}
+  #pageUp            {right: 210px;}
+  #pageDown          {right: 210px;}
+}
+@media screen and (min-width: 1800px) {
+  #goTop             {right: 270px;}
+  #goBottom          {right: 270px;}
+  #pageUp            {right: 270px;}
+  #pageDown          {right: 270px;}
+}
+@media screen and (min-width: 1900px) {
+  #navs {
+    width                 : 68%;
+    margin                : auto;
+  }
+  #goTop             {right: 342px;}
+  #goBottom          {right: 342px;}
+  #pageUp            {right: 342px;}
+  #pageDown          {right: 342px;}
+}

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximun-scale=1.0, ">
+  <title>全球貨幣匯率換算中心</title>
+
+  <link rel="shortcut icon" href="img/favicon_$.ico" />
+  <link rel="stylesheet" type="text/css" href="css/Chart.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="css/animate.css" />
+  <link rel="stylesheet" type="text/css" href="css/index_style.css">
+
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/Chart.min.js"></script>
+  <script type="text/javascript" src="js/datatables.min.js"></script>
+
+</head>
+<body>
+  <div>
+    <h1 class="text-warning"><a href="login.php" target="blank"><img src="img/$.gif" title="後台登入" class="animated infinite bounce"></a> 全球貨幣匯率換算中心</h1>
+    <div class="container1">
+      <!-- 分頁列 ------------------------------------------------------------------------------------------------->
+      <div id="navs">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="first-tab" data-toggle="tab" href="#tab1" role="tab" >原始資料</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="second-tab" data-toggle="tab" href="#tab2" role="tab" >常用貨幣 匯率換算</a>
+          </li>
+        </ul>
+        <p>
+          <span>匯率更新時間(本地時間)︰</span>
+          <span id="dataTime"></span>
+        </p>
+        <!-- 分頁內容 -------------------------------------------------------------------------------------------->
+        <div class="tab-content" id="myTabContent">
+          <!-- 分頁內容1 ----------------------------------------------------------------------------------------->
+          <div class="tab-pane fade show active" id="tab1" role="tabpanel" >
+            <div class="container">
+              <table id="dt" class="w-100 table-white">
+                <thead>
+                  <tr>
+                    <th>順序</th>
+                    <th>貨幣代碼</th>
+                    <th>貨幣名</th>
+                    <th>1美元可兌換<br />該貨幣之匯率</th>
+                    <th>匯率更新時間(本地時間)</th>
+                  </tr>
+                </thead>
+                <tbody id="tb"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- 分頁內容2 ----------------------------------------------------------------------------------------->
+          <div class="tab-pane fade" id="tab2" role="tabpanel">
+            <p>
+              <span>匯率更新時間(本地時間)︰</span>
+              <span id="dataTime2"></span>
+            </p>
+            <div class="container">
+              
+              <table id="dt3" class="w-100 table-white">
+                <tr>
+                  <td>輸入要兌換的金額 <input type="number" class="inputCalcNum1" id="inputCalcNum1Id"> 再按Enter鍵</td>
+                  <td>從 <select name="" id="inputRateNameFrom" autofocus><option></option></select></td>
+                  <td id="fromUSD"></td>
+                </tr>
+                <tr>
+                  <td>換成 <span id="result"></span></td>
+                  <td>的 <select name="" id="inputRateNameTo" autofocus><option></option></select></td>
+                  <td id="toUSD"></td>
+                </tr>
+                <tr>
+                  <td colspan="3"><input type="button" value="計算"></td>
+                </tr>
+              </table>
+              <hr />
+              <table id="dt2" class="w-100 table-white">
+                <thead>
+                  <tr>
+                    <th>順序</th>
+                    <th>輸入要兌換的金額</th>
+                    <th>貨幣名</th>
+                    <th>1 <span id="calcName"></span><br />可兌換該貨幣之匯率</th>
+                    <th>貨幣代碼</th>
+                  </tr>
+                </thead>
+                <tbody id="tb2"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 上/下頁按鈕 ----------------------------------------------------------------------------------------->
+    <img id="goTop"    src="img/Top.png"></img>
+    <img id="pageUp"   src="img/Up.png"> </img>
+    <img id="pageDown" src="img/Up.png"> </img>
+    <img id="goBottom" src="img/Top.png"></img>
+    
+    <!-- 後台login----------------------------------------------------------------------------------------->
+    <!-- <div class="login">
+      <form action="" onsubmit="return check(this)">
+          帳號︰<input type="text" name="acc"><br /><br />
+          密碼︰<input type="password" name="pwd"><br /><br />
+          <input type="text" name="and"><br /><br />
+          <input type="submit" value="登入">
+        </form>
+    </div> -->
+
+    <!-- 頁尾----------------------------------------------------------------------------------------->
+    <footer>
+      <div>
+        <a href="https://tw.rter.info/howto_currencyapi.php" target="blank">資料授權︰RTER 全球即時匯率API</a>
+      </div>
+      <div class="freshTime">網頁刷新時間︰<span class="freshTime span"></span></div>
+    </footer>
+  </div>
+  
+  <script>
+    let printAll = "";
+    let printPopularCurrency = "";
+    let countPop = 1;
+    let countAll = 1;
+    let date2019 = new Date("2019");
+    let dataTime = new Array();
+    let inputRateNameOptions = "";
+    let inputRateNameOptionsArray = new Array();
+    
+    // 網頁刷新時間
+    $('.span').text(pageRefreshTime()+" UTC"+chkUTC());
+    
+    // UTC數字加上+
+    function chkUTC() {
+      refreshTime = new Date();
+      var offset = (refreshTime.getTimezoneOffset())/60*-1;
+
+      return (offset>-1)? "+"+offset.toString() : offset;
+    }
+    // 日期補零
+    function addZero(num) {
+      return ("0"+num).substr(-2);
+    }
+    // 取得網頁刷新時間
+    function pageRefreshTime() {
+      let utc8 = new Date();
+      let mth  = addZero(utc8.getMonth()+1);
+      let date = addZero(utc8.getDate());
+      let hrs  = addZero(utc8.getHours());
+      let min  = addZero(utc8.getMinutes());
+      let sec  = addZero(utc8.getSeconds());
+
+      return utc8.getFullYear()+"-"+ mth +"-"+ date +" "+ hrs +":"+ min +":"+ sec;
+    }
+    // 匯率取得日期轉換成本地時間
+    function utcToLocal(txt) {
+
+      let utc8 = new Date((Date.parse(txt))-((refreshTime.getTimezoneOffset())*60*1000));
+      let mth  = addZero(utc8.getMonth()+1);
+      let date = addZero(utc8.getDate());
+      let hrs  = addZero(utc8.getHours());
+      let min  = addZero(utc8.getMinutes());
+      let sec  = addZero(utc8.getSeconds());
+
+      return utc8.getFullYear()+"-"+ mth +"-"+ date +" "+ hrs +":"+ min +":"+ sec;
+    }
+    // 刪除原本資料多餘的USD文字
+    function removeUSD(usd) {
+      return (usd != "USD")
+             ? usd.replace("USD", "")
+             : usd
+    }
+
+    $.when(
+    $.getJSON('others/codes.json').done(function(re) {codeNames = re;}),
+    $.getJSON('api.php').done(function(dataReceived) {data = dataReceived;})).
+    then(function () {
+
+      // 取得 API 物件資料
+      let names  = Object.keys(data);
+      let ivalues = Object.values(data);
+
+      for (let i=0; i<names.length; i++) {
+        // 只拿最新的匯率名單
+        if (Date.parse(ivalues[i].UTC) > Date.parse(date2019)) {
+          // 將取得最新匯率的時間存到變數
+          if (i > 0 && (utcToLocal(ivalues[i].UTC)) != (utcToLocal(ivalues[i-1].UTC))) {
+            dataTime.push(utcToLocal(ivalues[i].UTC));
+          }
+          // 找出常用貨幣
+          if (codeNames[removeUSD(names[i])][1] == "comm") {
+            printPopularCurrency+= `
+                            <tr>
+                              <td>${countPop}</td>
+                              <td>
+                                <input type="number" class="inputCalcNum">
+                              </td>
+                              <td>
+                                ${codeNames[removeUSD(names[i])][0]} 
+                                ${removeUSD(names[i])}
+                              </td>
+                              <td class="calcRate" id="${removeUSD(names[i])}"></td>
+                              <td>${removeUSD(names[i])}</td>
+                            </tr>
+                          `;
+            countPop++;
+            // 產生貨幣選項陣列
+            inputRateNameOptionsArray.push(removeUSD(names[i]));
+          }
+
+          // 去掉舊資料的全部最新匯率貨幣清單
+          printAll+= `
+                    <tr>
+                      <td>${countAll}</td>
+                      <td>
+                        ${(names[i] != "USD")
+                        ? names[i].replace("USD", "")
+                        : names[i]
+                        }
+                      </td>
+                      <td>
+                        ${(names[i] != "USD")
+                        ? codeNames[names[i].replace("USD", "")][0]
+                        : codeNames[names[i]][0]
+                        }
+                      </td>
+                      <td>
+                        ${(ivalues[i].Exrate<0.01 || names[i].length>6)
+                        ? ivalues[i].Exrate
+                        : ivalues[i].Exrate.toFixed(2)}
+                      </td>
+                      <td>${utcToLocal(ivalues[i].UTC)}</td>
+                    </tr>
+                  `;
+          countAll++;
+        }
+      }
+      $('#tb').html(printAll);
+      $('#tb2').html(printPopularCurrency);
+      $('#dataTime').html(dataTime[0]);
+      $('#dataTime2').html(dataTime[0]);
+
+      $('#dt').DataTable({
+        "language": {"url": "others/datatables-chinese-traditional.json"},
+        "lengthMenu": [ [ -1, 10, 50], [ "All",10, 50] ]
+      });
+      $('#dt2').DataTable({
+        "language": {"url": "others/datatables-chinese-traditional.json"},
+        "lengthMenu": [ [ -1], [ "All"] ]
+      });
+
+      // 產生貨幣選項
+      inputRateNameOptionsArray.sort();
+      inputRateNameOptions+=`<option value="----請選擇貨幣----">----請選擇貨幣----</option>`;
+
+      for (let i=0; i<inputRateNameOptionsArray.length; i++) {
+        inputRateNameOptions+=`<option value="${inputRateNameOptionsArray[i]}"> 
+                                              ${inputRateNameOptionsArray[i]}
+                                              ${codeNames[inputRateNameOptionsArray[i]][0]}
+                              </option>`;
+      }
+      $('#inputRateNameFrom').html(inputRateNameOptions);
+      $('#inputRateNameTo').html(inputRateNameOptions);
+
+      // $('#dt3 select option').attr("size", $('#inputRateNameFrom option').length);
+
+      // 即時顯示要兌換的來源貨幣名
+      $(document).ready(function() {
+        $('#inputRateNameFrom').on("change", function() {
+          iName = $('#inputRateNameFrom').val();
+          $('#calcName').text(codeNames[iName][0]+`(${iName})`);
+        });
+      });
+      // 取得兌換 來源貨幣匯率
+      $('#inputRateNameFrom').on("change", function() {
+        rateFrom = ivalues[names.indexOf("USD"+($('#inputRateNameFrom').val()))].Exrate;
+        $('#fromUSD').text("對1美元匯率︰"+rateFrom);
+      });
+      // 取得兌換 目標貨幣匯率
+      $('#inputRateNameTo').on("change", function() {
+        rateTo = ivalues[names.indexOf("USD"+($('#inputRateNameTo').val()))].Exrate;
+        $('#toUSD').text("對1美元匯率︰"+rateTo);
+      });
+      // 匯率換算 上方 輸入+Enter即時換算on("change",
+      $('.inputCalcNum1').on("change", function() {
+        inputCalcNum1 = $('.inputCalcNum1').val();
+        rateTo = ivalues[names.indexOf("USD"+($('#inputRateNameTo').val()))].Exrate;
+        $('#result').text((inputCalcNum1*rateTo/rateFrom).toFixed(2));
+
+        for (let i=0; i<names.length; i++) {
+          // 只拿最新的匯率名單
+          if (Date.parse(ivalues[i].UTC) > Date.parse(date2019)) {
+            // 找出常用貨幣
+            if (codeNames[removeUSD(names[i])][1] == "comm") {
+              rateToSelf = ivalues[names.indexOf(names[i])].Exrate;
+              $(`#${removeUSD(names[i])}`).text((inputCalcNum1*rateToSelf/rateFrom).toFixed(2));
+        }}}
+      });
+      // 匯率換算 上方 輸入+Enter即時換算keypress
+      $('.inputCalcNum1').keypress(function() {
+        inputCalcNum1 = $('.inputCalcNum1').val();
+        $('#result').text((inputCalcNum1*rateTo/rateFrom).toFixed(2));
+
+        for (let i=0; i<names.length; i++) {
+          // 只拿最新的匯率名單
+          if (Date.parse(ivalues[i].UTC) > Date.parse(date2019)) {
+            // 找出常用貨幣
+            if (codeNames[removeUSD(names[i])][1] == "comm") {
+              rateToSelf = ivalues[names.indexOf(names[i])].Exrate;
+              $(`#${removeUSD(names[i])}`).text((inputCalcNum1*rateToSelf/rateFrom).toFixed(2));
+        }}}
+      });
+      // 匯率換算 上方 計算按鈕換算
+      $('[value="計算"]').click(function() {
+        inputCalcNum1 = $('.inputCalcNum1').val();
+        $('#result').text((inputCalcNum1*rateTo/rateFrom).toFixed(2));
+
+        for (let i=0; i<names.length; i++) {
+          // 只拿最新的匯率名單
+          if (Date.parse(ivalues[i].UTC) > Date.parse(date2019)) {
+            // 找出常用貨幣
+            if (codeNames[removeUSD(names[i])][1] == "comm") {
+              rateToSelf = ivalues[names.indexOf(names[i])].Exrate;
+              $(`#${removeUSD(names[i])}`).text((inputCalcNum1*rateToSelf/rateFrom).toFixed(2));
+        }}}
+      });
+      // 匯率換算 下方到上方 輸入+Enter即時換算on("change",
+      $('.inputCalcNum').on("change", function() {
+        inputCalcNum = $('.inputCalcNum').val();
+        $('#result').text((inputCalcNum*rateTo/rateFrom).toFixed(2));
+      });
+      // 匯率換算 下方到上方 輸入+Enter即時換算keypress
+      $('.inputCalcNum').keypress(function() {
+        inputCalcNum = $('.inputCalcNum').val();
+        $('#result').text((inputCalcNum*rateTo/rateFrom).toFixed(2));
+        
+        // rateFrom = ivalues[names.indexOf("USD"+($('#inputRateNameFrom').val()))].Exrate;
+
+        // for (let i=0; i<names.length; i++) {
+        //   // 只拿最新的匯率名單
+        //   if (Date.parse(ivalues[i].UTC) > Date.parse(date2019)) {
+        //     // 找出常用貨幣
+        //     if (codeNames[removeUSD(names[i])][1] == "comm") {
+        //       rateToSelf = ivalues[names.indexOf(names[i])].Exrate;
+        //       $(`#${removeUSD(names[i])}`).text((inputCalcNum*rateToSelf/rateFrom).toFixed(2));
+        // }}}
+      });
+
+      // 輸入金額
+      // $(document).ready(function() {
+      //   $('.inputCalcNum').on("input", function() {
+      //     $('.calcRate').text(($(this).val())*100);
+      //   });
+      // });
+
+      }).fail(function(gg) {
+      alert('API串接失敗!');
+    });
+
+    // 後台登入
+    $('h1>img').click(function() {
+
+    });
+  
+    // 上/下頁 按鈕
+    $('#pageUp').click(function() {
+      var scroll = $(window).scrollTop();
+      var scrollto = scroll - 800;
+      $("html, body").animate({scrollTop: scrollto}, 700);
+    });
+
+    $('#pageDown').click(function() {
+      var scroll = $(window).scrollTop();
+      var scrollto = scroll + 800;
+      $("html, body").animate({scrollTop: scrollto}, 700);
+    });
+
+    // 回頂端 按鈕
+    $("#goTop").click(function(){
+      $("html, body").animate({scrollTop: 605}, 1000);
+    });
+    $(window).scroll(function() {
+      ($(this).scrollTop() > 50)
+      ? $('#goTop').fadeIn("slow")
+      : $('#goTop').stop().fadeOut("slow");
+    });
+
+    // 到底部 按鈕
+    $("#goBottom").click(function(){
+      let h = $("html, body").height();
+      $("html, body").animate({scrollTop: h}, 1500);
+    });
+    $(window).scroll(function() {
+      let h = $('html, body').height();
+      ($(this).scrollTop() < h-(50+$(window).height()))
+      ? $('#goBottom').fadeIn("slow")
+      : $('#goBottom').stop().fadeOut("slow");
+    });
+
+  </script>
+</body>
+</html>
