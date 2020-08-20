@@ -7,9 +7,6 @@ let dataTime = new Array();
 let inputRateNameOptions = "";
 let inputRateNameOptionsArray = new Array();
 
-// 網頁刷新時間
-$('.span').text(pageRefreshTime()+" UTC"+chkUTC());
-
 // UTC數字加上+
 function chkUTC() {
   refreshTime = new Date();
@@ -46,6 +43,9 @@ function removeUSD(usd) {
          ? usd.replace("USD", "")
          : usd
 }
+// 網頁刷新時間
+$('.span').text(pageRefreshTime()+" UTC"+chkUTC());
+
 $.when(
 $.getJSON('others/codes.json').done(function(re) {codeNames = re;}),
 $.getJSON('api.php').done(function(dataReceived) {data = dataReceived;})).
@@ -217,6 +217,7 @@ then(function () {
   }).fail(function(gg) {
   alert('API串接失敗!');
 });
+
 // 後台登入
 $('h1>img').click(function() {
 });
