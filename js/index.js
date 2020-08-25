@@ -221,3 +221,37 @@ then(function () {
 // 後台登入
 $('h1>img').click(function() {
 });
+
+// 上/下頁 按鈕
+$('#pageUp').click(function() {
+  var scroll = $(window).scrollTop();
+  var scrollto = scroll - 800;
+  $("html, body").animate({scrollTop: scrollto}, 700);
+});
+$('#pageDown').click(function() {
+  var scroll = $(window).scrollTop();
+  var scrollto = scroll + 800;
+  $("html, body").animate({scrollTop: scrollto}, 700);
+});
+
+// 回頂端 按鈕
+$("#goTop").click(function(){
+  $("html, body").animate({scrollTop: 605}, 1000);
+});
+$(window).scroll(function() {
+  ($(this).scrollTop() > 50)
+  ? $('#goTop').fadeIn("slow")
+  : $('#goTop').stop().fadeOut("slow");
+});
+
+// 到底部 按鈕
+$("#goBottom").click(function(){
+  let h = $("html, body").height();
+  $("html, body").animate({scrollTop: h}, 1500);
+});
+$(window).scroll(function() {
+  let h = $('html, body').height();
+  ($(this).scrollTop() < h-(50+$(window).height()))
+  ? $('#goBottom').fadeIn("slow")
+  : $('#goBottom').stop().fadeOut("slow");
+});

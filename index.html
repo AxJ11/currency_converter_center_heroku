@@ -10,11 +10,6 @@
   <link rel="stylesheet" type="text/css" href="css/animate.css" />
   <link rel="stylesheet" type="text/css" href="css/index_style.css">
 
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/Chart.min.js"></script>
-  <script type="text/javascript" src="js/datatables.min.js"></script>
-  <script src="js/index.js"></script>
-
 </head>
 <body>
   <div>
@@ -117,42 +112,13 @@
       <div>
         <a href="https://tw.rter.info/howto_currencyapi.php" target="blank">資料授權︰RTER 全球即時匯率API</a>
       </div>
-      <!-- <div class="freshTime">網頁刷新時間︰<span class="freshTime span"></span></div> -->
+      <div class="freshTime">網頁刷新時間︰<span class="freshTime span"></span></div>
     </footer>
   </div>
   
-  <script>
-    // 上/下頁 按鈕
-    $('#pageUp').click(function() {
-      var scroll = $(window).scrollTop();
-      var scrollto = scroll - 800;
-      $("html, body").animate({scrollTop: scrollto}, 700);
-    });
-    $('#pageDown').click(function() {
-      var scroll = $(window).scrollTop();
-      var scrollto = scroll + 800;
-      $("html, body").animate({scrollTop: scrollto}, 700);
-    });
-    // 回頂端 按鈕
-    $("#goTop").click(function(){
-      $("html, body").animate({scrollTop: 605}, 1000);
-    });
-    $(window).scroll(function() {
-      ($(this).scrollTop() > 50)
-      ? $('#goTop').fadeIn("slow")
-      : $('#goTop').stop().fadeOut("slow");
-    });
-    // 到底部 按鈕
-    $("#goBottom").click(function(){
-      let h = $("html, body").height();
-      $("html, body").animate({scrollTop: h}, 1500);
-    });
-    $(window).scroll(function() {
-      let h = $('html, body').height();
-      ($(this).scrollTop() < h-(50+$(window).height()))
-      ? $('#goBottom').fadeIn("slow")
-      : $('#goBottom').stop().fadeOut("slow");
-    });
-  </script>
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/Chart.min.js"></script>
+  <script type="text/javascript" src="js/datatables.min.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
