@@ -48,7 +48,7 @@ $('.span').text(pageRefreshTime()+" UTC"+chkUTC());
 
 $.when(
 $.getJSON('others/codes.json').done(function(re) {codeNames = re;}),
-$.getJSON('api.php').done(function(dataReceived) {data = dataReceived;})).
+$.getJSON('php/api.php').done(function(dataReceived) {data = dataReceived;})).
 then(function () {
   // 取得 API 物件資料
   let names  = Object.keys(data);
