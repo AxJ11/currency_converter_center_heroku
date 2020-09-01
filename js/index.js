@@ -66,9 +66,6 @@ then(function () {
                         <tr>
                           <td>${countPop}</td>
                           <td>
-                            <input type="number" class="inputCalcNum">
-                          </td>
-                          <td>
                             ${codeNames[removeUSD(names[i])][0]} 
                             ${removeUSD(names[i])}
                           </td>
@@ -152,6 +149,7 @@ then(function () {
   $('.inputCalcNum1').on("change", function() {
     inputCalcNum1 = $('.inputCalcNum1').val();
     rateTo = ivalues[names.indexOf("USD"+($('#inputRateNameTo').val()))].Exrate;
+    $('#inputValue').text(inputCalcNum1+" ");
     $('#result').text((inputCalcNum1*rateTo/rateFrom).toFixed(2));
     for (let i=0; i<names.length; i++) {
       // 只拿最新的匯率名單
@@ -165,6 +163,7 @@ then(function () {
   // 匯率換算 上方 輸入+Enter即時換算keypress
   $('.inputCalcNum1').keypress(function() {
     inputCalcNum1 = $('.inputCalcNum1').val();
+    $('#inputValue').text(inputCalcNum1+" ");
     $('#result').text((inputCalcNum1*rateTo/rateFrom).toFixed(2));
     for (let i=0; i<names.length; i++) {
       // 只拿最新的匯率名單
@@ -188,33 +187,18 @@ then(function () {
           $(`#${removeUSD(names[i])}`).text((inputCalcNum1*rateToSelf/rateFrom).toFixed(2));
     }}}
   });
-  // 匯率換算 下方到上方 輸入+Enter即時換算on("change",
-  $('.inputCalcNum').on("change", function() {
-    inputCalcNum = $('.inputCalcNum').val();
-    $('#result').text((inputCalcNum*rateTo/rateFrom).toFixed(2));
+  // 匯率換算 下方直接換算 輸入+Enter
+  $('*').click(function() {
+    if ($('') == 'inputCalcNum') {
+    let inputCalcNum = $('.inputCalcNum').val();
+    let inputID = attr('id');
+    console.log(inputID);
+    }
+    //$('#result').text((inputCalcNum*rateTo/rateFrom).toFixed(2));
   });
-  // 匯率換算 下方到上方 輸入+Enter即時換算keypress
-  $('.inputCalcNum').keypress(function() {
-    inputCalcNum = $('.inputCalcNum').val();
-    $('#result').text((inputCalcNum*rateTo/rateFrom).toFixed(2));
-    
-    // rateFrom = ivalues[names.indexOf("USD"+($('#inputRateNameFrom').val()))].Exrate;
-    // for (let i=0; i<names.length; i++) {
-    //   // 只拿最新的匯率名單
-    //   if (Date.parse(ivalues[i].UTC) > Date.parse(date2019)) {
-    //     // 找出常用貨幣
-    //     if (codeNames[removeUSD(names[i])][1] == "comm") {
-    //       rateToSelf = ivalues[names.indexOf(names[i])].Exrate;
-    //       $(`#${removeUSD(names[i])}`).text((inputCalcNum*rateToSelf/rateFrom).toFixed(2));
-    // }}}
-  });
-  // 輸入金額
-  // $(document).ready(function() {
-  //   $('.inputCalcNum').on("input", function() {
-  //     $('.calcRate').text(($(this).val())*100);
-  //   });
-  // });
-  }).fail(function(gg) {
+  // 匯率換算 下方直接換算 即時換算keypress
+
+}).fail(function(gg) {
   alert('API串接失敗!');
 });
 
